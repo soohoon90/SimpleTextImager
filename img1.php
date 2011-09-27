@@ -65,8 +65,9 @@
 	    imagettftext($image, $text_size, 0, $line_x, $line_y+$topmargin, $text_color, $font, $line);
 		$line_count += 1;
 	}
-	$file .= "generated2/".md5($text).".png";
-	imagepng ($image, $file);
+	$file .= md5($text);
+	$file .= ".png";
+	imagepng ($image, "generated2/".$file);
 	imagedestroy($image);
-	header( 'Location: '.$file ) ;
+	header( 'Location: generated2/$file' ) ;
 ?>

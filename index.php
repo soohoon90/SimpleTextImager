@@ -34,37 +34,11 @@
 </style>
 <body OnLoad="document.generate.text.focus();">
 	<div id="wrapper">
-		<div id="top">
-			<script type="text/javascript"><!--
-			google_ad_client = "ca-pub-5514275160469717";
-			/* textimage.top */
-			google_ad_slot = "5426083399";
-			google_ad_width = 728;
-			google_ad_height = 90;
-			//-->
-			</script>
-			<script type="text/javascript"
-			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-			</script>
-		</div>
 		<div id="header">
 			<h1>Tumblr Text Image Generator</h1>
 			<h2>Easiest way to make text-image posts</h2>
 		</div>
 		<div id="content">
-			<div id="sidebar">
-				<script type="text/javascript"><!--
-				google_ad_client = "ca-pub-5514275160469717";
-				/* textimagetool */
-				google_ad_slot = "1656474497";
-				google_ad_width = 160;
-				google_ad_height = 600;
-				//-->
-				</script>
-				<script type="text/javascript"
-				src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-				</script>
-			</div>
 			<div class="forms">
 				<h3>Image with Title, text and tagline</h3>
 				<h4>500x375</h4>

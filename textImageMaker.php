@@ -3,7 +3,8 @@
 	class textImageMaker{
 		
 		public $fontFolder = "fonts/";
-		public $font = 'Chunkfive.otf';
+		public $fonts;
+		public $defaultFont = 'Chunkfive.otf';
 		
 		public $titleText;
 		public $text;
@@ -18,11 +19,13 @@
 		public $tagAlign = 'center';
 		
 		public $textOnlyMode = false;
+
+		public $imageBackround;
+		public $imageBackgroundMargin;
 		
 		public $imageWidth = 500;
 		public $imageHeight = 500;
-		
-		public $margin = 50;
+		public $imageMargin = 50;
 		
 		public $outputFolder  = 'generated/';
 		
@@ -35,34 +38,33 @@
 			$titleColor = imagecolorallocate ($this->image, 25, 25, 25);
 			$textColor = imagecolorallocate ($this->image, 255, 255, 255);
 			imagefill($this->image, 0, 0, $backgroundColor);
-			imagerectangle ( $this->image, $this->margin, $this->margin, $this->imageWidth-$this->margin, $this->imageHeight-$this->margin, imagecolorallocate ($this->image, 25, 25, 25) );
+			imagerectangle ( $this->image, $this->imageMargin, $this->imageMargin, $this->imageWidth-$this->imageMargin, $this->imageHeight-$this->imageMargin, imagecolorallocate ($this->image, 25, 25, 25) );
 			
 			if ($this->textOnlyMode){
-				$top = $this->margin + $titleHeight;
-				$availableWidth = $this->imageWidth - $this->margin*2;
-				$availableHeight = $this->imageHeight - $this->margin*2;
+				$top = $this->imageMargin + $titleHeight;
+				$availableWidth = $this->imageWidth - $this->imageMargin*2;
+				$availableHeight = $this->imageHeight - $this->imageMargin*2;
 				$this->drawTextBlock($this->font, &$this->textSize, $this->text, $textColor, $this->textAlign, $top, $availableWidth, $availableHeight);
 			}else{
-				//function drawText($font, &$size, $text, $color, $align, $verticalAlign, $margin)
+				//function drawText($font, &$size, $text, $color, $align, $verticalAlign, $imageMargin)
 				echo "title was ".$this->titleSize.", tag was ".$this->tagSize."<br>";
-				$this->drawText($this->font, $this->titleSize, $this->titleText, $titleColor, $this->titleAlign, 'top', $this->margin);
-				$this->drawText($this->font, $this->tagSize, $this->tagText, $tagColor, $this->tagAlign, 'bottom', $this->margin);
+				$this->drawText($this->font, $this->titleSize, $this->titleText, $titleColor, $this->titleAlign, 'top', $this->imageMargin);
+				$this->drawText($this->font, $this->tagSize, $this->tagText, $tagColor, $this->tagAlign, 'bottom', $this->imageMargin);
 				echo "title was ".$this->titleSize.", tag was ".$this->tagSize."<br>";
 				$titleHeight = $this->getTextHeight($this->font, $this->titleSize);
 				$tagHeight = $this->getTextHeight($this->font, $this->tagSize);
-				$top = $this->margin + $titleHeight;
-				$availableWidth = $this->imageWidth - $this->margin*2;
-				$availableHeight = $this->imageHeight - $this->margin*2 - $titleHeight;
+				$top = $this->imageMargin + $titleHeight;
+				$availableWidth = $this->imageWidth - $this->imageMargin*2;
+				$availableHeight = $this->imageHeight - $this->imageMargin*2 - $titleHeight;
 				$this->drawTextBlock($this->font, $this->textSize, $this->text, $textColor, $this->textAlign, $top, $availableWidth, $availableHeight);
 			}
-			
 		}
 		
 		function output(){
-			$outputFilename = md5($this->text).'.png';
-			imagepng ($this->image, $this->outputFolder.$outputFilename);
+			$outputFilename = $this->outputFolder.md5($this->text).'.png';
+			imagepng ($this->image, $outputFilename);
 			imagedestroy($this->image);
-			return $this->outputFolder.$outputFilename;
+			return $outputFilename;
 		}
 		
 		function fitTextSizeHorizontally($font, $size, $text, $availableWidth){
@@ -103,10 +105,10 @@
 			return $box[1] - $box[7];
 		}
 		
-		function drawText($font, &$size, $text, $color, $align, $verticalAlign, $margin){
+		function drawText($font, &$size, $text, $color, $align, $verticalAlign, $imageMargin){
 
 			// adjust the size so it fits
-			$size = $this->fitTextSizeHorizontally($font, $size, $text, $this->imageWidth-$margin*2);
+			$size = $this->fitTextSizeHorizontally($font, $size, $text, $this->imageWidth-$imageMargin*2);
 			
 			// figure out width and height
 			$textWidth = $this->getTextWidth($font, $size, $text);
@@ -114,13 +116,13 @@
 			
 			// figure out x location
 			if ($align == 'center')	$x = $this->imageWidth/2 - $textWidth/2;
-			else if ($align == 'right')	$x = $this->imageWidth - $textWidth - $this->margin;
-			else $x = $this->margin;
+			else if ($align == 'right')	$x = $this->imageWidth - $textWidth - $this->imageMargin;
+			else $x = $this->imageMargin;
 			
 			// figure out y location
 			if ($verticalAlign == 'bottom')	$y = $this->imageHeight - $textHeight*0.2;
 			else if ( $verticalAlign == 'center') $y = $this->imageHeight/2 + $textHeight;
-			else $y = $this->margin + $textHeight; 
+			else $y = $this->imageMargin + $textHeight; 
 
 			// draw text
 			imagettftext($this->image, $size, 0, $x, $y, $color, $font, $text);
@@ -139,9 +141,9 @@
 				
 				$textWidth = $this->getTextWidth($font, $size, $lines[$i]);
 								
-				if ($align=="right") $x = $this->imageWidth - $$this->margin - $textWidth;
+				if ($align=="right") $x = $this->imageWidth - $$this->imageMargin - $textWidth;
 				else if ($align=="center") $x = $this->imageWidth/2 - $textWidth/2;
-				else $x = $this->margin;
+				else $x = $this->imageMargin;
 				
 			    $y = ($textHeight * ($i+1)) + $top;
 			
@@ -168,6 +170,19 @@
 		        } 
 		    }
 			return $lines;
+		}
+		
+
+		function getDirectoryList ($directory) {
+			$results = array();
+			$handler = opendir($directory);
+			while ($file = readdir($handler)) {
+				if ($file != "." && $file != "..") {
+					$results[] = $file;
+				}
+			}
+			closedir($handler);
+			return $results;
 		}
 	}
 	
